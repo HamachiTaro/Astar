@@ -18,23 +18,23 @@ public class GridController : MonoBehaviour
     private Grid _grid;
 
     private SingleAssignmentDisposable _editDisposable;
-    
+
     private AppController.NodeType _nodeType;
     public AppController.NodeType EditNodeType {
         get => _nodeType;
         set => _nodeType = value;
     }
 
-
     private int _startNodeId = -1;
-    
+
     private int _goalNodeId = -1;
-    
+
     public Grid Generate(int xNum, int zNum)
     {
         _nodeViews = new List<NodeView>();
 
         var count = 0;
+
         for (var x = 0; x < xNum; x++)
         {
             for (var z = 0; z < zNum; z++)
@@ -47,7 +47,7 @@ public class GridController : MonoBehaviour
                 count++;
             }
         }
-        
+
         // データ作成
         _grid = new Grid(xNum, zNum);
 
@@ -71,14 +71,16 @@ public class GridController : MonoBehaviour
         foreach (var node in nodes)
         {
             var id = node.id;
+
+            if (id == _startNodeId || id == _goalNodeId)
+            {
+                continue;
+            }
+
             var nodeView = _nodeViews.First(x => x.ID == id);
             nodeView.SetPath();
         }
     }
-    
-    
-    
-    
 
     /// <summary>
     /// editing the grid
@@ -102,12 +104,12 @@ public class GridController : MonoBehaviour
                 if (hitObject.GetComponent<NodeView>())
                 {
                     var nodeView = hitObject.GetComponent<NodeView>();
-                    
+
                     // TODO よくない
                     var x = (int)nodeView.transform.position.x;
                     var z = (int)nodeView.transform.position.z;
                     var nodeViewId = nodeView.ID;
-                    
+
                     switch (_nodeType)
                     {
                         case AppController.NodeType.Start:
@@ -120,7 +122,7 @@ public class GridController : MonoBehaviour
                                 _startNodeId = nodeViewId;
                             }
                             // clear as normal, if the node is the "start".
-                            else if(_startNodeId == nodeViewId)
+                            else if (_startNodeId == nodeViewId)
                             {
                                 Debug.Log("this node is start. clear");
                                 nodeView.SetAsNormal();
@@ -132,14 +134,15 @@ public class GridController : MonoBehaviour
                                 // clear the last start
                                 _nodeViews.First(nv => nv.ID == _startNodeId).SetAsNormal();
                                 _grid.ClearStart();
-                                
+
                                 // new start node
                                 _grid.SetStartNode(x, z);
                                 nodeView.SetAsStart();
                                 _startNodeId = nodeViewId;
                             }
+
                             break;
-                        
+
                         case AppController.NodeType.Goal:
 
                             if (_goalNodeId == -1)
@@ -161,15 +164,15 @@ public class GridController : MonoBehaviour
                                 // clear the last start
                                 _nodeViews.First(nv => nv.ID == _goalNodeId).SetAsNormal();
                                 _grid.ClearGoal();
-                                
+
                                 // new start node
                                 _grid.SetGoalNode(x, z);
                                 nodeView.SetAsGoal();
                                 _goalNodeId = nodeViewId;
                             }
-                            
+
                             break;
-                        
+
                         case AppController.NodeType.UnWalkable:
 
                             // if ()
@@ -178,13 +181,11 @@ public class GridController : MonoBehaviour
                             // }
                             nodeView.SetAsUnWalkable();
                             _grid.SetWalkable(x, z, false);
-                            
+
                             break;
                     }
                 }
             }
         }
     }
-    
-    
 }
