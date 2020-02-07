@@ -59,10 +59,10 @@ public class AppController : MonoBehaviour
 
         _stateAsObservable.Value = State.GenerateGrid;
     }
-
+    
     private void OnGenerateGrid()
     {
-        _grid = _gridController.Generate(10, 7);
+        _grid = _gridController.Generate(10, 10);
 
         _stateAsObservable.Value = State.EditGrid;
     }
@@ -84,9 +84,7 @@ public class AppController : MonoBehaviour
             .AddTo(_stateDisposables);
 
         _uiController.ClickClearAsObservable
-            .Subscribe(_ => {
-                
-            })
+            .Subscribe(_ => _gridController.Clear())
             .AddTo(_stateDisposables);
     }
 
@@ -95,6 +93,15 @@ public class AppController : MonoBehaviour
         var aStar = new AStar();
         aStar.FindPath(_grid);
         var path = aStar.Paths;
+
+        Debug.Log("---");
+        Debug.Log(path.Count);
+        foreach (var p in path)
+        {
+            Debug.Log(p);
+        }
+        
+        
         _gridController.SetAsPath(path);
     }
     

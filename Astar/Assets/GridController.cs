@@ -188,4 +188,19 @@ public class GridController : MonoBehaviour
             }
         }
     }
+    
+    public void Clear()
+    {
+        foreach (var node in _nodeViews)
+        {
+            node.SetAsNormal();
+        }
+        
+        _grid.AllNormal();
+        
+        _startNodeId = -1;
+        _goalNodeId = -1;
+    }
+    
+    
 }
