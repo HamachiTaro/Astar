@@ -1,24 +1,23 @@
-﻿
-/// <summary>
+﻿/// <summary>
 /// contain the data of position
 /// this class does not draw.
 /// </summary>
 public class Grid
 {
-    private Node _startNode;
-
-    private Node _goalNode;
-
+    
     private Node[,] _nodes;
-
-    private int xNum;
-
-    private int zNum;
-
+    
+    private Node _startNode;
     public Node StartNode => _startNode;
+    
+    private Node _goalNode;
     public Node GoalNode => _goalNode;
-    public int XNum => xNum;
-    public int ZNum => zNum;
+    
+    private int _xNum;
+    public int XNum => _xNum;
+    
+    private int _zNum;
+    public int ZNum => _zNum;
 
     /// <summary>
     /// constructor
@@ -27,15 +26,14 @@ public class Grid
     /// <param name="numCols"></param>
     public Grid(int xNum, int zNum)
     {
-        this.xNum = xNum;
-        this.zNum = zNum;
-
+        _xNum = xNum;
+        _zNum = zNum;
         _nodes = new Node[xNum, zNum];
 
         var id = 0;
-        for (int x = 0; x < xNum; x++)
+        for (int x = 0; x < _xNum; x++)
         {
-            for (int z = 0; z < zNum; z++)
+            for (int z = 0; z < _zNum; z++)
             {
                 var node = new Node(x, z, id);
                 _nodes[x, z] = node;
@@ -44,7 +42,7 @@ public class Grid
             }
         }
     }
-    
+
     /// <summary>
     /// return thd specified x,z position node
     /// </summary>
@@ -63,11 +61,6 @@ public class Grid
     /// <param name="z"></param>
     public void SetGoalNode(int x, int z)
     {
-        if (_goalNode != null)
-        {
-            
-        }
-        
         _goalNode = _nodes[x, z];
     }
 
@@ -100,5 +93,19 @@ public class Grid
     public void SetWalkable(int x, int z, bool walkable)
     {
         _nodes[x, z].walkable = walkable;
+    }
+
+    /// <summary>
+    /// set all node as normal
+    /// </summary>
+    public void AllNormal()
+    {
+        foreach (var node in _nodes)
+        {
+            node.walkable = false;
+        }
+
+        _startNode = null;
+        _goalNode = null;
     }
 }

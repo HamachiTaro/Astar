@@ -155,7 +155,6 @@ public class AStar : MonoBehaviour
 
     private void BuildPath()
     {
-        
         _paths = new List<Node>();
         var node = _goalNode;
         Debug.Log("******************");
@@ -168,8 +167,7 @@ public class AStar : MonoBehaviour
             _paths.Insert(0, node);
         }
     }
-    
-    
+
     /// <summary>
     /// if node is included in open list
     /// </summary>
